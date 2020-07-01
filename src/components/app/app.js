@@ -15,8 +15,6 @@ export default class App extends Component {
                 { count: 0, id: 3 },
                 { count: 0, id: 4 },
             ],
-            term: "",
-
         };
         this.deleteItem = this.deleteItem.bind(this);
         this.increment = this.increment.bind(this);
