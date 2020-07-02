@@ -12,8 +12,6 @@ export default class PostListItem extends Component {
     } = this.props;
 
     let classNames = "app-list-item d-flex justify-content-between";
-
-
     return (
       <div className={classNames}>
         <div className="d-flex justify-content-center align-items-center">

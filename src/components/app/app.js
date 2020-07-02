@@ -20,6 +20,8 @@ export default class App extends Component {
         this.increment = this.increment.bind(this);
         this.decrement = this.decrement.bind(this);
         this.refreshCount = this.refreshCount.bind(this);
+        this.restore = this.restore.bind(this);
+        this.baseState = this.state.data;
     }
 
     increment(itemId) {
@@ -58,12 +60,19 @@ export default class App extends Component {
             }
         });
     }
-
+    restore() {
+        this.setState(() => {
+            const firstD = this.baseState;
+            if (this.state.data.length === 0) {
+                return {
+                    data: firstD
+                }
+            }
+        })
+    }
     deleteItem(id) {
         this.setState(({ data }) => {
             const index = data.findIndex(elem => elem.id === id);
-            console.log();
-
             const newArr = [...data.slice(0, index), ...data.slice(index + 1)];
             return {
                 data: newArr
@@ -71,57 +80,41 @@ export default class App extends Component {
         });
     }
 
-    searchPost(items, term) {
-        if (term.length === 0) {
-            return items;
-        }
-
-        return items.filter(item => {
-            return item.label.indexOf(term) > -1;
-        });
-    }
-
-    filterPost(items, filter) {
-        if (filter === "like") {
-            return items.filter(item => item.like);
-        } else {
-            return items;
-        }
-    }
-
-    onFilterSelect(filter) {
-        this.setState({ filter });
-    }
-
     render() {
-        const { data, term, filter } = this.state;
+
+        const { data } = this.state;
 
         const allPosts = this.state.data.length;
 
-        const visiblePosts = this.filterPost(this.searchPost(data, term), filter);
+        let notZero;
+        notZero = this.state.data.map(function (e) { return e.count }).filter(e => e.count > 0 ? e === 1 : e)
+
+        let classNames = "btn btn-primary disabled";
+        if (allPosts === 0) {
+            classNames = "btn btn-primary"
+        }
 
         return (
+
             <div className="app">
-                <AppHeader allPosts={allPosts} />
+                <AppHeader allPosts={allPosts} notZero={notZero} />
 
                 <div className="update">
                     <button className="btn btn-success" onClick={this.refreshCount}>
                         Refresh numbers <ion-icon name="sync-outline"></ion-icon>
                     </button>
-                    <button className="btn btn-primary" disabled>
+                    <button className={classNames} onClick={this.restore}> {/**/}
                         Restore <ion-icon name="swap-vertical-outline"></ion-icon>
                     </button>
                 </div>
                 <PostList
-                    posts={visiblePosts}
+                    data={data}
                     increment={this.increment}
                     decrement={this.decrement}
                     onDelete={this.deleteItem}
-                    onToggleImportant={this.onToggleImportant}
-                    onToggleLiked={this.onToggleLiked}
                     count={this.count}
                 />
             </div>
         );
     }
-}
+};
