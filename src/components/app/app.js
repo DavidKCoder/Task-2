@@ -24,6 +24,7 @@ export default class App extends Component {
         this.baseState = this.state.data;
     }
 
+    //*------------- Increment + -------------*//
     increment(itemId) {
         const data = this.state.data.map(({ id, count }) => ({
             count: id === itemId ? ++count : count,
@@ -36,6 +37,7 @@ export default class App extends Component {
             }
         });
     }
+    //*------------- Decrement + -------------*//
     decrement(itemId) {
         const data = this.state.data.map(({ id, count }) => ({
             count: id === itemId && count > 0 ? --count : count,
@@ -48,6 +50,7 @@ export default class App extends Component {
             }
         });
     }
+    //*------------- Refresh button + -------------*//
     refreshCount() {
         const data = this.state.data.map(({ id, count }) => ({
             count: count > 0 ? count = 0 : count,
@@ -60,16 +63,18 @@ export default class App extends Component {
             }
         });
     }
+    //*------------- Restore button + -------------*//
     restore() {
         this.setState(() => {
-            const firstD = this.baseState;
+            const baseState = this.baseState;
             if (this.state.data.length === 0) {
                 return {
-                    data: firstD
+                    data: baseState
                 }
             }
         })
     }
+    //*------------- Delete items + -------------*//
     deleteItem(id) {
         this.setState(({ data }) => {
             const index = data.findIndex(elem => elem.id === id);
@@ -81,14 +86,14 @@ export default class App extends Component {
     }
 
     render() {
-
         const { data } = this.state;
-
         const allPosts = this.state.data.length;
 
+        //!---- Counts, more them 0, incomplete...
         let notZero;
         notZero = this.state.data.map(function (e) { return e.count }).filter(e => e.count > 0 ? e === 1 : e)
-
+        //!---------------------------------------- 
+        
         let classNames = "btn btn-primary disabled";
         if (allPosts === 0) {
             classNames = "btn btn-primary"
