@@ -66,12 +66,10 @@ export default class App extends Component {
     }
     //*------------- Restore button -------------*//
     restore() {
-        if (this.state.data.length === 0)
-            this.setState(() => {
-                return {
-                    data: this.baseState
-                }
-            })
+        if (this.state.data.length === 0) {
+            this.setState({ data: this.baseState });
+        }
+
     }
     //*------------- Delete items -------------*//
     deleteItem(id) {
