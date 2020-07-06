@@ -14,6 +14,7 @@ export default class App extends Component {
                 { count: 0, id: 2 },
                 { count: 0, id: 3 },
                 { count: 0, id: 4 },
+                { count: 0, id: 5 },
             ],
         };
         this.deleteItem = this.deleteItem.bind(this);
@@ -24,7 +25,7 @@ export default class App extends Component {
         this.baseState = this.state.data;
     }
 
-    //*------------- Increment + -------------*//
+    //*------------- Increment - -------------*//
     increment(itemId) {
         const data = this.state.data.map(({ id, count }) => ({
             count: id === itemId ? ++count : count,
@@ -50,10 +51,10 @@ export default class App extends Component {
             }
         });
     }
-    //*------------- Refresh button + -------------*//
+    //*------------- Refresh button -------------*//
     refreshCount() {
         const data = this.state.data.map(({ id, count }) => ({
-            count: count > 0 ? count = 0 : count,
+            count: count > 0 ? 0 : count,
             id,
         }));
         this.setState(prevState => {
@@ -63,18 +64,16 @@ export default class App extends Component {
             }
         });
     }
-    //*------------- Restore button + -------------*//
+    //*------------- Restore button -------------*//
     restore() {
-        this.setState(() => {
-            const baseState = this.baseState;
-            if (this.state.data.length === 0) {
+        if (this.state.data.length === 0)
+            this.setState(() => {
                 return {
-                    data: baseState
+                    data: this.baseState
                 }
-            }
-        })
+            })
     }
-    //*------------- Delete items + -------------*//
+    //*------------- Delete items -------------*//
     deleteItem(id) {
         this.setState(({ data }) => {
             const index = data.findIndex(elem => elem.id === id);
@@ -90,20 +89,17 @@ export default class App extends Component {
         const allPosts = this.state.data.length;
 
         //!---- Counts, more them 0, incomplete...
-        let notZero;
-        notZero = this.state.data.map(function (e) { return e.count }).filter(e => e.count > 0 ? e === 1 : e)
-        //!---------------------------------------- 
-        
+        let notZero = data.filter(e => e.count > 0).length;
+
+        //! Restore btn
         let classNames = "btn btn-primary disabled";
         if (allPosts === 0) {
             classNames = "btn btn-primary"
         }
 
         return (
-
             <div className="app">
                 <AppHeader allPosts={allPosts} notZero={notZero} />
-
                 <div className="update">
                     <button className="btn btn-success" onClick={this.refreshCount}>
                         Refresh numbers <ion-icon name="sync-outline"></ion-icon>

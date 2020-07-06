@@ -12,6 +12,11 @@ export default class PostListItem extends Component {
     } = this.props;
 
     let classNames = "app-list-item d-flex justify-content-between";
+
+    let classs = "btn btn-info btn-sm disabled"; // for decrease btn
+    if(count > 0) {
+      classs = "btn btn-info btn-sm"
+    }
     return (
       <div className={classNames}>
         <div className="d-flex justify-content-center align-items-center">
@@ -21,7 +26,7 @@ export default class PostListItem extends Component {
           <button className="btn btn-secondary btn-sm" type="button" onClick={increment}>
             <i className="fa fa-plus-circle"></i>
           </button>
-          <button className="btn btn-info btn-sm" type="button" onClick={decrement}>
+          <button className={classs} type="button" onClick={decrement}>
             <i className="fa fa-minus-circle"></i>
           </button>
           <button className="btn btn-danger btn-sm" type="button" onClick={onDelete}>
