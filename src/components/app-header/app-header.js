@@ -1,6 +1,7 @@
 import React from "react";
+import PropTypes from "prop-types"
 
-const AppHeader = ({ allPosts, notZero }) => {
+function AppHeader({ allPosts, notZero }) {
   return (
     <div className="app-header">
       <div className="items">
@@ -14,7 +15,7 @@ const AppHeader = ({ allPosts, notZero }) => {
       </div>
       <div className="items">
         <h1>
-          <i class="fa fa-search"></i>
+          <i className="fa fa-search"></i>
         </h1>
         <h1>
           <span className="badge badge-pill badge-info">{notZero}</span>
@@ -24,5 +25,9 @@ const AppHeader = ({ allPosts, notZero }) => {
     </div>
   );
 };
+  AppHeader.propTypes = {
+    allPosts: PropTypes.number.isRequired,
+    notZero: PropTypes.number.isRequired
+  }
 
 export default AppHeader;
