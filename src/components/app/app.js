@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types"
 
 import AppHeader from "../app-header";
 
@@ -17,7 +18,7 @@ export default class App extends Component {
                 { count: 0, id: 5 },
             ],
         };
-        this.deleteItem = this.deleteItem.bind(this);
+        // this.deleteItem = this.deleteItem.bind(this);
         this.increment = this.increment.bind(this);
         this.decrement = this.decrement.bind(this);
         this.refreshCount = this.refreshCount.bind(this);
@@ -25,76 +26,50 @@ export default class App extends Component {
         this.baseState = this.state.data;
     }
 
-    //*------------- Increment - -------------*//
+    //*------------- Add item - -------------*//
     increment(itemId) {
         const data = this.state.data.map(({ id, count }) => ({
             count: id === itemId ? ++count : count,
             id,
         }));
-        this.setState(prevState => {
-            return {
-                ...prevState,
-                data,
-            }
-        });
+        this.setState({ data })
     }
-    //*------------- Decrement + -------------*//
+    //*------------- Subtraction + -------------*//
     decrement(itemId) {
         const data = this.state.data.map(({ id, count }) => ({
             count: id === itemId && count > 0 ? --count : count,
             id,
-        }));
-        this.setState(prevState => {
-            return {
-                ...prevState,
-                data,
-            }
-        });
+        }))
+        this.setState({ data })
     }
-    //*------------- Refresh button -------------*//
+    //*------------- All items 0 -------------*//
     refreshCount() {
         const data = this.state.data.map(({ id, count }) => ({
             count: count > 0 ? 0 : count,
             id,
-        }));
-        this.setState(prevState => {
-            return {
-                ...prevState,
-                data,
-            }
-        });
+        }))
+        this.setState({ data })
     }
-    //*------------- Restore button -------------*//
+    //*------------- Renew all list -------------*//
     restore() {
         if (this.state.data.length === 0) {
-            this.setState({ data: this.baseState });
+            this.setState({ data: this.baseState })
         }
+    };
 
-    }
-    //*------------- Delete items -------------*//
-    deleteItem(id) {
-        this.setState(({ data }) => {
-            const index = data.findIndex(elem => elem.id === id);
-            const newArr = [...data.slice(0, index), ...data.slice(index + 1)];
-            return {
-                data: newArr
-            };
-        });
+    //*------------- Remove row -------------*//
+    //! deletion using filter method "new"
+    deleteItem = (id) => {
+        const data = this.state.data.filter((i) => i.id !== id);
+        this.setState({ data: data })
     }
 
+    
     render() {
-        const { data } = this.state;
-        const allPosts = this.state.data.length;
-
-        //!---- Counts, more them 0, incomplete...
-        let notZero = data.filter(e => e.count > 0).length;
-
-        //! Restore btn
-        let classNames = "btn btn-primary disabled";
-        if (allPosts === 0) {
-            classNames = "btn btn-primary"
-        }
-
+        const { data } = { ...this.state } //!---changes
+        const allPosts = this.state.data.length
+        //!--- Counts, more them 0
+        let notZero = data.filter(e => e.count > 0).length
         return (
             <div className="app">
                 <AppHeader allPosts={allPosts} notZero={notZero} />
@@ -102,7 +77,8 @@ export default class App extends Component {
                     <button className="btn btn-success" onClick={this.refreshCount}>
                         Refresh numbers <ion-icon name="sync-outline"></ion-icon>
                     </button>
-                    <button className={classNames} onClick={this.restore}> {/**/}
+                    {/* Attachment inner class */}
+                    <button className={allPosts === 0 ? "btn btn-primary" : "btn btn-primary disabled"} onClick={this.restore}> {/**/}
                         Restore <ion-icon name="swap-vertical-outline"></ion-icon>
                     </button>
                 </div>
@@ -114,6 +90,20 @@ export default class App extends Component {
                     count={this.count}
                 />
             </div>
-        );
+        )
     }
 };
+
+// REVIEW // I'm not sure if this is true,
+         // Code requires additional review :)
+App.propTypes = {
+    data: PropTypes.arrayOf(
+        PropTypes.shape({
+            count: PropTypes.number,
+            id: PropTypes.number
+        })
+    ),
+};
+
+
+//NOTE ---------- I have a console warning regarding esLint ----------
