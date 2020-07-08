@@ -1,8 +1,9 @@
 import React from "react";
 import PostListItem from "../post-list-item";
 import "./post-list.css";
+import PropTypes from "prop-types"
 
-const PostList = ({ data, onDelete, increment, decrement}) => {
+function PostList({ data, onDelete, increment, decrement }) {
   const elements = data.map(item => {
     const { id, ...itemProps } = item;
     return (
@@ -19,6 +20,14 @@ const PostList = ({ data, onDelete, increment, decrement}) => {
   });
 
   return <ul className="app-list list-group">{elements}</ul>;
+
 };
+
+PostList.propTypes = {
+  data: PropTypes.array.isRequired,
+  onDelete: PropTypes.func.isRequired,
+  increment: PropTypes.func.isRequired,
+  decrement: PropTypes.func.isRequired
+}
 
 export default PostList;
